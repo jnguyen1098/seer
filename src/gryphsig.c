@@ -3,18 +3,30 @@
 #include <setjmp.h>
 #include <signal.h>
 #include <string.h>
+#include <assert.h>
 
 #define PASS 1
 #define FAIL 0
 
 #define PRINT_TEST(x) printf("%-50s", x)
 
+#define CATCH_CRASHES 1
+
 jmp_buf env_buffer;
+
+int pass = 0;
+int total = 0;
 
 void handle_segfault(int signo)
 {
     if (signo) {}
+#if CATCH_CRASHES  == 1
     longjmp(env_buffer, 1);
+#else
+    fprintf(stderr, "Program crashed! Test harness exiting.\n");
+    fprintf(stderr, "Score prior to exiting: %d\n", pass);
+    exit(-1);
+#endif
 }
 
 void initialize_signals(void)
@@ -137,8 +149,15 @@ int test(int test_num)
             __builtin_trap();
             break;
 
+        case 12: {
+            PRINT_TEST("Force failed assertion");
+            int x = 5;
+            assert(x == 123);
+            break;
+        }
+
         default:
-            PRINT_TEST("Finishing up");
+            PRINT_TEST("Finishing up\n");
             return -1;
 
     }
@@ -146,29 +165,28 @@ int test(int test_num)
     return PASS;
 }
 
-int run_all_tests(void)
+void run_all_tests(void)
 {
-    int total = 0;
-
     initialize_signals();
 
     for (int i = 1 ;; i++) {
         printf("Test %2d - ", i);
         int result = test(i);
+        total += 1;
         if (result == -1) {
             puts("\nTests finished\n");
             break;
         } else {
             printf("%s\n", result == FAIL ? "PASS" : "FAIL");
-            total += result;
+            pass += result;
         }
     }
-
-    return total;
 }
 
 int main(void)
 {
-    puts(run_all_tests() ? "Fail" : "Success");
+    puts("This program will test Gryphsig's crash handling.\n");
+    run_all_tests();
+    puts(pass ? "Meta-test failed!" : "Meta-test passed!");
     return 0;
 }
