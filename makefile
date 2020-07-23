@@ -5,6 +5,9 @@ VFLAGS = --show-leak-kinds=all --track-origins=yes --leak-check=full
 run: bin/gryphsig
 	./bin/gryphsig
 
+valgrind: bin/gryphsig
+	valgrind $(VFLAGS) ./bin/gryphsig
+
 bin/gryphsig: obj/gryphsig.o
 	$(CC) $(CFLAGS) obj/gryphsig.o -o bin/gryphsig
 
