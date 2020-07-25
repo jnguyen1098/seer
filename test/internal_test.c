@@ -3,6 +3,26 @@
 extern int _pass;
 extern int _total;
 
+/**********************************************************************
+   When segmentation faults are caught, the stack does not unwind.
+   This means data modification during the test is "interrupted" and
+   it is not recommended to access this information (for consistency).
+
+   Every structure or variable you modify should be local only to
+   the test, as a result. You may probably disregard what I'm saying
+   here and depending on how complex the test cases are, it could
+   still work, but it is likely undefined behaviour (nasal demons).
+
+   Ideally, everything that needs to be modified in a test case is
+   set up and allocated within the case itself (as a fixture), but
+   I understand that isn't always the case (for example, a FILE
+   that is opened but not closed due to a crash). In which case you
+   would have to fix this data inconsistency within the signal handler
+   function (this means potentially using global variables).
+ ********************************************************************/
+
+// TODO: move signal handler and make it extensible
+
 int _internal_test(int test_num)
 {
     if (setjmp(env_buffer))

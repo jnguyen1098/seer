@@ -15,6 +15,8 @@ void _handle_segfault(int signo)
 #endif
 }
 
+// TODO: command output verifier
+
 void _initialize_signals(void)
 {
     struct sigaction crash_handler;

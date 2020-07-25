@@ -18,8 +18,13 @@ jmp_buf env_buffer;
 extern int pass;
 extern int total;
 
+// called by the user before testing
 void initialize_test_harness(void);
 
+// user-level actions
+void handle_segfault(int signo);
+
+/* Internal functions -- do not touch */
 void _handle_segfault(int signo);
 void _initialize_signals(void);
 int _internal_test_case(int test_num);
