@@ -6,12 +6,26 @@
 #include <sys/wait.h>
 #include <unistd.h>
 
+#include "placeholder.h"
+
+void simulate(int signal_number);
+
 int main(void)
+{
+    simulate(1);
+    return 0;
+
+    for (int i = 0; i < 32; i++) {
+        simulate(i);
+        puts("");
+    }
+    return 0;
+}
+
+void simulate(int signal_number)
 {
     int     fd[2], nbytes;
     pid_t   childpid;
-    char    string[] = "Hello, world!\n";
-    char    readBuffer[80];
 
     pipe(fd);
 
@@ -23,63 +37,51 @@ int main(void)
     if (childpid == 0) {
         close(fd[0]);
 
-        char *something = malloc(1);
-        for (int i = 0; i < 100; i++)
-            free(something);
-        free((char *)0x324);
-        __builtin_trap();
-        raise(SIGSEGV);
+        Response test_result = { "Hey dude", 1 };
 
-        write(fd[1], string, strlen(string) + 1);
+        write(fd[1], &test_result, sizeof(test_result));
         exit(0);
     }
 
     else {
         close(fd[1]);
 
+#if 0
+        kill(childpid, signal_number);
+#endif
+
         int returnStatus = 0;
-        waitpid(childpid, &returnStatus, 0);
+        waitpid(childpid, &returnStatus, WUNTRACED);
 
-        if (WIFSIGNALED(returnStatus)) {
-            printf("first return status %ld\n", returnStatus);
-            switch (WTERMSIG(returnStatus)) {
-                case SIGSEGV:
-                    puts("segfault");
-                    break;
+        printf("Right after waitpid, returnStatus is %ld\n", returnStatus);
 
-                case SIGBUS:
-                    puts("bus error");
-                    break;
-
-                case SIGILL:
-                    puts("illegal instruction");
-                    break;
-
-                case SIGTERM:
-                    puts("termination");
-                    break;
-
-                case SIGINT:
-                    puts("interruption");
-                    break;
-
-                case SIGSTOP:
-                    puts("stop signal");
-                    break;
-
-                case SIGABRT:
-                    puts("abort");
-                    break;
-            }
-            return 0;
+        if (WIFEXITED(returnStatus)) {
+            printf("WIFEXITED: child exited normally: %s\n",
+                    strsignal(WEXITSTATUS(returnStatus)));
         }
 
-        nbytes = read(fd[0], readBuffer, sizeof(readBuffer));
-        if (nbytes == 0)
-            puts("Got no string");
-        else
-            printf("Received (%d) string: %s", strlen(readBuffer), readBuffer);
-    }
+        else if (WIFSTOPPED(returnStatus)) {
+            printf("WIFSTOPPPED: child got exited by stop: %s\n",
+                    strsignal(WSTOPSIG(returnStatus)));
+            return;
+        }
 
-    return 0;
+        else if (WIFSIGNALED(returnStatus)) {
+            printf("WIFSIGNALED: child exited by signal: %s\n",
+                    strsignal(WTERMSIG(returnStatus)));
+            return;
+        }
+
+        Response test_result = { 0 };
+
+        nbytes = read(fd[0], &test_result, sizeof(test_result));
+        if (nbytes == 0) {
+            puts("Got nothing");
+        }
+        else {
+            printf("Received payload\n");
+            printf("Feedback: %s\n", test_result.comment);
+            printf("Passed: %d\n", test_result.passed);
+        }
+    }
 }
