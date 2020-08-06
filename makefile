@@ -1,38 +1,67 @@
+# compiler
 CC = gcc
+
+# c compiler flags
 CFLAGS = -std=gnu99 -Wall -Wextra -Wpedantic -ggdb3 -Iinclude -D_CATCH_CRASHES
+
+# valgrind flags
 VFLAGS = --show-leak-kinds=all --track-origins=yes --leak-check=full
 
-run: bin/gryphsig
-	./bin/gryphsig
+# binary name
+TARGET_EXEC ?= a.out
 
-valgrind: bin/gryphsig
-	valgrind $(VFLAGS) ./bin/gryphsig
+# where to build
+BUILD_DIR := ./build
+# source file folders
+SRC_DIRS := ./gryphsig ./student
+# include directories
+INC_DIRS := ./gryphsig ./student
 
+# create all source file (.c) names
+SRCS := $(shell find $(SRC_DIRS) -name *.c)
+# create all obj file (.o) names
+OBJS := $(SRCS:%=$(BUILD_DIR)/%.o)
+# dependencies
+DEPS := $(OBJS:.o=.d)
+# include flags
+INC_FLAGS := $(addprefix -I,$(INC_DIRS))
 
-internal_test: bin/internal_test
-	./bin/internal_test
+# info
+help:
+	@echo ""
+	@echo "=========================== Gryphsig =============================="
+	@echo ""
+	@echo "    \e[7mgrade\e[0m"
+	@echo "        grade student's submission"
+	@echo ""
+	@echo "    \e[7medit\e[0m"
+	@echo "        edit test cases"
+	@echo ""
+	@echo "    \e[7mplan\e[0m"
+	@echo "        edit grading rules"
+	@echo ""
+	@echo "=========================== Internal =============================="
+	@echo ""
+	@echo "    \e[7mclean\e[0m"
+	@echo "        cleans up all extraneous files/folders"
+	@echo ""
+	@echo "    \e[7mtest\e[0m"
+	@echo "        run internal tests"
+	@echo ""
+	@echo "==================================================================="
 
+# build executable
+$(BUILD_DIR)/$(TARGET_EXEC): $(OBJS)
+	$(CC) $(OBJS) -o $@
 
-bin/gryphsig: obj/gryphsig.o obj/linkedlist.o obj/main.o
-	$(CC) $(CFLAGS) obj/gryphsig.o obj/linkedlist.o obj/main.o -o bin/gryphsig
+# build c objs
+$(BUILD_DIR)/%.c.o: %.c
+	$(CC) $(CFLAGS) -c $< -o $@
 
-bin/internal_test: obj/internal_test.o obj/gryphsig.o
-	$(CC) $(CFLAGS) obj/internal_test.o obj/gryphsig.o -o bin/internal_test
+.PHONY: test clean
 
-
-obj/gryphsig.o: src/gryphsig.c
-	$(CC) $(CFLAGS) src/gryphsig.c -c -o obj/gryphsig.o
-
-obj/internal_test.o: test/internal_test.c
-	$(CC) $(CFLAGS) test/internal_test.c -c -o obj/internal_test.o
-
-obj/linkedlist.o: project/linkedlist.c
-	$(CC) $(CFLAGS) -Iproject project/linkedlist.c -c -o obj/linkedlist.o
-
-obj/main.o: src/main.c
-	$(CC) $(CFLAGS) src/main.c -c -o obj/main.o
-
+test: $(BUILD_DIR)/gryphsig.c.o
+	@echo "hello"
 
 clean:
-	rm -rf bin/*
-	rm -rf obj/*
+	rm -rf $(BUILD_DIR)/*

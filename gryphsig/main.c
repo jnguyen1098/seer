@@ -1,9 +1,5 @@
 #include "gryphsig.h"
 
-// TODO: make this less clunky
-// TODO: tell students not to use abort()
-#include "../project/linkedlist.h"
-
 extern int _pass;
 extern int _total;
 
