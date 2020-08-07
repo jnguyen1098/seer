@@ -10,9 +10,9 @@ TARGET_EXEC = seer_exec
 # where to build
 BUILD_DIR := build
 # source file folders
-SRC_DIRS := seer student
+SRC_DIRS := seer student instructor
 # include directories
-INC_DIRS := seer student
+INC_DIRS := seer student instructor
 
 # create all source file (.c) names
 SRCS := $(shell find $(SRC_DIRS) -name *.c)
@@ -23,12 +23,6 @@ INC_FLAGS := $(addprefix -I,$(INC_DIRS))
 
 # info
 help:
-	@echo ""
-	@echo "srcs: " $(SRCS)
-	@echo ""
-	@echo "objs: " $(OBJS)
-	@echo ""
-	@echo "incl: " $(INC_FLAGS)
 	@echo "=========================== Gryphsig =============================="
 	@echo ""
 	@echo "    \e[7mgrade\e[0m"
@@ -45,10 +39,20 @@ help:
 	@echo "    \e[7mclean\e[0m"
 	@echo "        cleans up all extraneous files/folders"
 	@echo ""
+	@echo "    \e[7mscan\e[0m"
+	@echo "        view scanned source files"
+	@echo ""
 	@echo "    \e[7mtest\e[0m"
 	@echo "        run internal tests"
 	@echo ""
 	@echo "==================================================================="
+
+scan:
+	@echo "srcs: " $(SRCS)
+	@echo ""
+	@echo "objs: " $(OBJS)
+	@echo ""
+	@echo "incl: " $(INC_FLAGS)
 
 grade: $(BUILD_DIR)/$(TARGET_EXEC)
 	./$(BUILD_DIR)/$(TARGET_EXEC)
