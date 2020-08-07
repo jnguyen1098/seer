@@ -52,6 +52,40 @@ help:
 	@echo ""
 	@echo "==================================================================="
 
+# build executable
+$(BUILD_DIR)/$(TARGET_EXEC): $(OBJS)
+	$(CC) $(OBJS) -o $@
+
+# build c objs
+$(BUILD_DIR)/%.c.o: %.c
+	$(CC) $(CFLAGS) $(INC_FLAGS) -c $< -o $@
+
+.PHONY: grade valgrade clean edit
+
+# grade student submission
+grade: $(BUILD_DIR)/$(TARGET_EXEC)
+	./$(BUILD_DIR)/$(TARGET_EXEC)
+
+# grade student submission with valgrind
+valgrade: $(BUILD_DIR)/$(TARGET_EXEC)
+	valgrind $(VFLAGS) ./$(BUILD_DIR)/$(TARGET_EXEC)
+
+# edit test cases
+edit:
+	$(EDITOR) ./instructor/test_cases.c
+
+# plan grading scheme
+plan:
+	$(EDITOR) ./instructor/run_main.c
+
+# clean extraneous files
+clean:
+	rm -rf $(BUILD_DIR)/seer/*
+	rm -rf $(BUILD_DIR)/student/*
+	rm -rf $(BUILD_DIR)/instructor/*
+	rm -rf $(BUILD_DIR)/$(TARGET_EXEC)
+
+# scan files 
 scan:
 	@echo "\e[7msrcs\e[0m"
 	@printf "    "
@@ -64,34 +98,3 @@ scan:
 	@echo "\e[7mincl\e[0m"
 	@printf "    "
 	@echo $(INC_FLAGS) | sed 's/ /\n    /g'
-
-grade: $(BUILD_DIR)/$(TARGET_EXEC)
-	./$(BUILD_DIR)/$(TARGET_EXEC)
-
-valgrade: $(BUILD_DIR)/$(TARGET_EXEC)
-	valgrind $(VFLAGS) ./$(BUILD_DIR)/$(TARGET_EXEC)
-
-# build executable
-$(BUILD_DIR)/$(TARGET_EXEC): $(OBJS)
-	$(CC) $(OBJS) -o $@
-
-# build c objs
-$(BUILD_DIR)/%.c.o: %.c
-	$(CC) $(CFLAGS) $(INC_FLAGS) -c $< -o $@
-
-.PHONY: test clean edit
-
-test: $(BUILD_DIR)/gryphsig.c.o
-	@echo "hello"
-
-edit:
-	$(EDITOR) ./instructor/test_cases.c
-
-plan:
-	$(EDITOR) ./instructor/run_main.c
-
-clean:
-	rm -rf $(BUILD_DIR)/seer/*
-	rm -rf $(BUILD_DIR)/student/*
-	rm -rf $(BUILD_DIR)/instructor/*
-	rm -rf $(BUILD_DIR)/$(TARGET_EXEC)
