@@ -72,7 +72,7 @@ void simulate(int signal_number)
             return;
         }
 
-        Response test_result = { 0 };
+        Response test_result = {{0}, 0};
 
         nbytes = read(fd[0], &test_result, sizeof(test_result));
         if (nbytes == 0) {
