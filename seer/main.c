@@ -1,4 +1,5 @@
 #include "seer.h"
+#include "../student/student.h"
 
 int main(void)
 {

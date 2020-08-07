@@ -1,15 +1,12 @@
 # compiler
 CC = gcc
-
 # c compiler flags
-CFLAGS = -std=c99 -Wall -Wextra -Wpedantic -ggdb3 -Iinclude
-
+CFLAGS = -std=c99 -Wall -Wextra -Wpedantic -ggdb3
 # valgrind flags
 VFLAGS = --show-leak-kinds=all --track-origins=yes --leak-check=full
 
 # binary name
 TARGET_EXEC = seer_exec
-
 # where to build
 BUILD_DIR := build
 # source file folders
@@ -27,6 +24,11 @@ INC_FLAGS := $(addprefix -I,$(INC_DIRS))
 # info
 help:
 	@echo ""
+	@echo "srcs: " $(SRCS)
+	@echo ""
+	@echo "objs: " $(OBJS)
+	@echo ""
+	@echo "incl: " $(INC_FLAGS)
 	@echo "=========================== Gryphsig =============================="
 	@echo ""
 	@echo "    \e[7mgrade\e[0m"
@@ -36,7 +38,7 @@ help:
 	@echo "        edit test cases"
 	@echo ""
 	@echo "    \e[7mplan\e[0m"
-	@echo "        edit grading rules"
+	@echo "        edit grading calculations"
 	@echo ""
 	@echo "=========================== Internal =============================="
 	@echo ""
@@ -48,7 +50,7 @@ help:
 	@echo ""
 	@echo "==================================================================="
 
-run: $(BUILD_DIR)/$(TARGET_EXEC)
+grade: $(BUILD_DIR)/$(TARGET_EXEC)
 	./$(BUILD_DIR)/$(TARGET_EXEC)
 
 # build executable
