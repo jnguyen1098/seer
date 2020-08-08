@@ -13,15 +13,9 @@ help:
 	@echo "        edit test cases"
 	@echo ""
 	@echo "    \e[7mplan\e[0m"
-	@echo "        edit grading calculations"
+	@echo "        edit grading report"
 	@echo ""
 	@echo "========================== Development ============================"
-	@echo ""
-	@echo "    \e[7mtest\e[0m"
-	@echo "        run internal tests"
-	@echo ""
-	@echo "    \e[7mlint\e[0m"
-	@echo "        run code analysis"
 	@echo ""
 	@echo "    \e[7mscan\e[0m"
 	@echo "        view scanned source files"
@@ -85,15 +79,6 @@ grade: $(BUILD_DIR)/$(TARGET_EXEC)
 # grade student submission with valgrind
 valgrade: $(BUILD_DIR)/$(TARGET_EXEC)
 	valgrind $(VFLAGS) ./$(BUILD_DIR)/$(TARGET_EXEC) --valgrind
-
-# run internal tests
-test:
-	@echo "Not implemented yet."
-	@echo "TODO: add ANSI colour test to test."
-
-# check for coding booboos
-lint:
-	cppcheck --enable=all --language=c --std=c99 --check-config $(SRCS) -i $(INC_DIRS)
 
 # scan files 
 scan:

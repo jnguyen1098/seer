@@ -10,13 +10,15 @@ The frontend of Seer is a simple `makefile` interface that can be brought up usi
 
 - Crash handling -- Seer catches as many crash signals as possible and records them into the test results
 
-## Typical workflow
+## Typical Workflow
 
-1. Use `make plan` to format your results report
+1. Edit `config.h` and add any needed `#include` statements
 
-2. Use `make edit` to edit the test cases and fixtures
+2. (Optional) Format test report using `make plan`
 
-3. Move a given student's `.c` and `.h` files to the `student` folder
+2. Create test cases and fixtures using `make edit`
+
+3. Move `.c` and `.h` files to the `student` folder
 
 4. Use `make grade` or `make valgrade` to grade a submission
 
