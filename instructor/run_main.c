@@ -6,11 +6,12 @@
 
 int main(void)
 {
-    call_seer();
-    GREEN_MSG("hello world\n");
-    YELLOW_MSG("hello world\n");
-    RED_MSG("hello world\n");
-//    _seer_test_ansi();
-    printf("5 + 6 is %d\n", add_two_numbers(5, 6));
+    for (int i = 0; i < 32; i++) {
+        TestResult lmao = run_test(i);
+        printf("passed: %d\n", lmao.passed);
+        printf("feedback: %s\n", lmao.feedback);
+        puts("");
+    }
+    malloc(1);
     return 0;
 }
