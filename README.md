@@ -1,5 +1,7 @@
 # Seer
 
+(This repo contains a linked list example project and test cases)
+
 Generalized test harness for small-to-medium-sized C projects.
 
 The frontend of Seer is a simple `makefile` interface that can be brought up using the command `make` or `make help`.
