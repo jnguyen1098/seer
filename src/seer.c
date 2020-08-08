@@ -59,7 +59,7 @@ TestResult run_test(int test_num)
     }
 
     /* Fork and check */
-    fflush(_seer_output);
+    fflush(stdout);
     if ((child_pid = fork()) == -1) {
         RED_MSG("Fatal: fork failed!\n");
         perror("fork");

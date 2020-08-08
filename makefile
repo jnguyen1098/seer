@@ -9,6 +9,9 @@ help:
 	@echo "    \e[7mvalgrade\e[0m"
 	@echo "        grade submission with valgrind"
 	@echo ""
+	@echo "    \e[7mconfig\e[0m"
+	@echo "        edit config"
+	@echo ""
 	@echo "    \e[7medit\e[0m"
 	@echo "        edit test cases"
 	@echo ""
@@ -54,7 +57,7 @@ OBJS := $(SRCS:%=$(BUILD_DIR)/%.o)
 INC_FLAGS := $(addprefix -I,$(INC_DIRS))
 
 # action recipes
-.PHONY: grade valgrade test lint scan debug clean
+.PHONY: grade valgrade config edit plan scan debug clean
 
 # build executable
 $(BUILD_DIR)/$(TARGET_EXEC): $(OBJS)
@@ -64,14 +67,6 @@ $(BUILD_DIR)/$(TARGET_EXEC): $(OBJS)
 $(BUILD_DIR)/%.c.o: %.c
 	$(CC) $(CFLAGS) $(INC_FLAGS) -c $< -o $@
 
-# edit test cases
-edit:
-	$(EDITOR) ./instructor/test_cases.c
-
-# plan grading scheme
-plan:
-	$(EDITOR) ./instructor/run_main.c
-
 # grade student submission
 grade: $(BUILD_DIR)/$(TARGET_EXEC)
 	./$(BUILD_DIR)/$(TARGET_EXEC)
@@ -79,6 +74,18 @@ grade: $(BUILD_DIR)/$(TARGET_EXEC)
 # grade student submission with valgrind
 valgrade: $(BUILD_DIR)/$(TARGET_EXEC)
 	valgrind $(VFLAGS) ./$(BUILD_DIR)/$(TARGET_EXEC) --valgrind
+
+# edit config
+config:
+	$(EDITOR) ./instructor/config.h
+
+# edit test cases
+edit:
+	$(EDITOR) ./instructor/test_cases.c
+
+# plan grading scheme
+plan:
+	$(EDITOR) ./instructor/run_main.c
 
 # scan files 
 scan:

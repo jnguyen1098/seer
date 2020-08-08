@@ -35,13 +35,18 @@ TestResult _run_test(int test_num)
          * There is a linked list example in a separate repo branch.
          **/
 
-        /*
-
         case 0: {
+            strcpy(test_result.description, "Test string_to_upper() on 'hello'");
+            char test_string[] = "hello";
+            char target_string[] = "HELLO";
+            if (strcmp(string_to_upper(test_string), target_string)) {
+                test_result.result = FAIL;
+                strcpy(test_result.comment, "Strings unequal");
+            } else {
+                test_result.result = PASS;
+            }
             break;
         }
-
-         */
 
         /* This is used to signal that the 
          * testing is finished. Do not change.*/
