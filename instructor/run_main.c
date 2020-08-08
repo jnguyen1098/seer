@@ -1,8 +1,15 @@
+/**
+ * @file run_main.c
+ * @author Jason Nguyen <jnguye21@uoguelph.ca>
+ * @brief This is the overarching main() that facilitates the test
+ *        record-keeping. Here you may modify the grading calculation
+ *        as well as the final report that is outputted.
+ */
 #include "seer.h"
 #include "text.h"
 #define MAX_TESTS 1000
 
-/* TODO: edit config.h to include student .h files */
+/* Make sure to edit config.h to include student files */
 #include "config.h"
 
 int main(int argc, char *argv[])
@@ -18,14 +25,12 @@ int main(int argc, char *argv[])
     /* Initialize test results */
     TestResult test_results[MAX_TESTS] = {0};
 
-    /* TODO: create new grading variables if needed */
     int num_test = 0;
     int num_pass = 0;
     int num_fail = 0;
     int num_crash = 0;
 
-    /* Run tests and record results. Shouldn't change
-     * unless absolutely necessary. */
+    /* Run tests and record results */
     for (;;) {
         if (valgrind_run) {
             printf("\nValgrind output for test %d\n", num_test);
@@ -41,7 +46,7 @@ int main(int argc, char *argv[])
     printf("%s%s\n", valgrind_run ? "\n" : "",
         "- - - - - - TEST RESULTS - - - - - -");
 
-    /* TODO: Print test results. Change as you place. */
+    /* Print test results */
     for (int i = 0; i < num_test; i++) {
 
         /* Print test and description */
@@ -77,7 +82,7 @@ int main(int argc, char *argv[])
 
     puts("");
 
-    /* TODO: Final report. Change as you please. */
+    /* Final report */
     GREEN_MSG("Tests passed: ");
     printf("%d/%d\n", num_pass, num_test);
 
@@ -87,7 +92,7 @@ int main(int argc, char *argv[])
     YELLOW_MSG("Crashes: ");
     printf("%d/%d\n", num_crash, num_test);
 
-    /* TODO: Final grade calculation. Change as you please. */
+    /* Final grade calculation */
     printf("\nFinal score: %.2f%%\n", 100.00 * ((float)num_pass/(float)num_test));
 
 
