@@ -1,3 +1,36 @@
+# MAKEFILE
+
+help:
+	@echo "=========================== Gryphsig =============================="
+	@echo ""
+	@echo "    \e[7mgrade\e[0m"
+	@echo "        grade student's submission"
+	@echo ""
+	@echo "    \e[7mvalgrade\e[0m"
+	@echo "        grade submission with valgrind"
+	@echo ""
+	@echo "    \e[7medit\e[0m"
+	@echo "        edit test cases"
+	@echo ""
+	@echo "    \e[7mplan\e[0m"
+	@echo "        edit grading calculations"
+	@echo ""
+	@echo "=========================== Internal =============================="
+	@echo ""
+	@echo "    \e[7mclean\e[0m"
+	@echo "        cleans up all extraneous files/folders"
+	@echo ""
+	@echo "    \e[7mscan\e[0m"
+	@echo "        view scanned source files"
+	@echo ""
+	@echo "    \e[7mdebug\e[0m"
+	@echo "        view all make variables"
+	@echo ""
+	@echo "    \e[7mtest\e[0m"
+	@echo "        run internal tests"
+	@echo ""
+	@echo "==================================================================="
+
 # compiler
 CC = gcc
 # editor
@@ -22,35 +55,6 @@ SRCS := $(shell find $(SRC_DIRS) -name *.c)
 OBJS := $(SRCS:%=$(BUILD_DIR)/%.o)
 # include flags
 INC_FLAGS := $(addprefix -I,$(INC_DIRS))
-
-# info
-help:
-	@echo "=========================== Gryphsig =============================="
-	@echo ""
-	@echo "    \e[7mgrade\e[0m"
-	@echo "        grade student's submission"
-	@echo ""
-	@echo "    \e[7mvalgrade\e[0m"
-	@echo "        grade submission with valgrind"
-	@echo ""
-	@echo "    \e[7medit\e[0m"
-	@echo "        edit test cases"
-	@echo ""
-	@echo "    \e[7mplan\e[0m"
-	@echo "        edit grading calculations"
-	@echo ""
-	@echo "=========================== Internal =============================="
-	@echo ""
-	@echo "    \e[7mclean\e[0m"
-	@echo "        cleans up all extraneous files/folders"
-	@echo ""
-	@echo "    \e[7mscan\e[0m"
-	@echo "        view scanned source files"
-	@echo ""
-	@echo "    \e[7mtest\e[0m"
-	@echo "        run internal tests"
-	@echo ""
-	@echo "==================================================================="
 
 # build executable
 $(BUILD_DIR)/$(TARGET_EXEC): $(OBJS)
@@ -98,3 +102,7 @@ scan:
 	@echo "\e[7mincl\e[0m"
 	@printf "    "
 	@echo $(INC_FLAGS) | sed 's/ /\n    /g'
+
+# debug variables
+debug:
+	$(foreach v, $(.VARIABLES), $(if $(filter file,$(origin $(v))), $(info $(v)=$($(v)))))
