@@ -1,21 +1,22 @@
 #include "seer.h"
 #include "text.h"
-#define MAX_TESTS 10000
+#define MAX_TESTS 1000
 
 /* TODO: edit config.h to include student .h files */
 #include "config.h"
 
-int main(void)
+int main(int argc, char *argv[])
 {
-    /* TODO: change output stream if writing to file */
-    _seer_output = stdout;
+    /* Change output if valgrind */
+    int valgrind_run = 0;
+    if (argc == 2) {
+        if (!strcmp(argv[1], "--valgrind")) {
+            valgrind_run = 1;
+        }
+    }
 
-    /* TODO: change error stream if writing to file */
-    _seer_error = stderr;
-
-    /* TODO: change MAX_TESTS if > 10000 tests */
-    TestResult test_results[MAX_TESTS] = {{0}};
-
+    /* Initialize test results */
+    TestResult test_results[MAX_TESTS] = {0};
 
     /* TODO: create new grading variables if needed */
     int num_test = 0;
@@ -26,14 +27,21 @@ int main(void)
     /* Run tests and record results. Shouldn't change
      * unless absolutely necessary. */
     for (;;) {
+        if (valgrind_run) {
+            printf("\nValgrind output for test %d\n", num_test);
+        }
         TestResult tmp_result = run_test(num_test);
         if (tmp_result.result == FINISH) {
             break;
         }
         test_results[num_test++] = tmp_result;
     }
+   
+    /* Print border */
+    printf("%s%s\n", valgrind_run ? "\n" : "",
+        "- - - - - - TEST RESULTS - - - - - -");
 
-    /* TODO: Print test results. Change as you please. */
+    /* TODO: Print test results. Change as you place. */
     for (int i = 0; i < num_test; i++) {
 
         /* Print test and description */
@@ -43,44 +51,43 @@ int main(void)
         switch (test_results[i].result) {
             case PASS:
                 num_pass++;
-                GREEN_MSG(_seer_output, "Passed! (");
-                GREEN_MSG(_seer_output, test_results[i].comment);
-                GREEN_MSG(_seer_output, ")\n");
+                GREEN_MSG("Passed! (");
+                GREEN_MSG(test_results[i].comment);
+                GREEN_MSG(")\n");
                 break;
 
             case FAIL:
                 num_fail++;
-                RED_MSG(_seer_output, "Failed! (");
-                RED_MSG(_seer_output, test_results[i].comment);
-                RED_MSG(_seer_output, ")\n");
+                RED_MSG("Failed! (");
+                RED_MSG(test_results[i].comment);
+                RED_MSG(")\n");
                 break;
 
             case CRASH:
                 num_crash++;
-                YELLOW_MSG(_seer_output, "Crashed! (");
-                YELLOW_MSG(_seer_output, test_results[i].comment);
-                YELLOW_MSG(_seer_output, ")\n");
+                YELLOW_MSG("Crashed! (");
+                YELLOW_MSG(test_results[i].comment);
+                YELLOW_MSG(")\n");
                 break;
 
             case INIT:
-                YELLOW_MSG(_seer_output, "Uninitialized test. Please fix.\n");
+                YELLOW_MSG("Uninitialized test. Please fix.\n");
         }
     }
 
-    /* \n */
     puts("");
 
-    /* Final report */
-    GREEN_MSG(_seer_output, "Tests passed: ");
+    /* TODO: Final report. Change as you please. */
+    GREEN_MSG("Tests passed: ");
     printf("%d/%d\n", num_pass, num_test);
 
-    RED_MSG(_seer_output, "Tests failed: ");
+    RED_MSG("Tests failed: ");
     printf("%d/%d\n", num_fail, num_test);
 
-    YELLOW_MSG(_seer_output, "Crashes: ");
+    YELLOW_MSG("Crashes: ");
     printf("%d/%d\n", num_crash, num_test);
 
-    /* Final score */
+    /* TODO: Final grade calculation. Change as you please. */
     printf("\nFinal score: %.2f%%\n", 100.00 * ((float)num_pass/(float)num_test));
 
 

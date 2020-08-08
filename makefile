@@ -84,7 +84,7 @@ grade: $(BUILD_DIR)/$(TARGET_EXEC)
 
 # grade student submission with valgrind
 valgrade: $(BUILD_DIR)/$(TARGET_EXEC)
-	valgrind $(VFLAGS) ./$(BUILD_DIR)/$(TARGET_EXEC)
+	valgrind $(VFLAGS) ./$(BUILD_DIR)/$(TARGET_EXEC) --valgrind
 
 # run internal tests
 test:

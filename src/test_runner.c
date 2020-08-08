@@ -38,10 +38,6 @@ const char _signalstr[32][16] = {
 
 TestResult run_test(int test_num)
 {
-    /* Retrieve stream */
-    extern FILE *_seer_output;
-    extern FILE *_seer_error;
-
     /* Create test result struct */
     TestResult test_result = TEST_RESULT_INIT;
 
@@ -51,7 +47,7 @@ TestResult run_test(int test_num)
 
     /* Check pipe */
     if (pipe(fd) == -1) {
-        RED_MSG(_seer_error, "Fatal: pipe failed!\n");
+        RED_MSG("Fatal: pipe failed!\n");
         perror("pipe");
         abort();
     }
@@ -59,7 +55,7 @@ TestResult run_test(int test_num)
     /* Fork and check */
     fflush(_seer_output);
     if ((child_pid = fork()) == -1) {
-        RED_MSG(_seer_error, "Fatal: fork failed!\n");
+        RED_MSG("Fatal: fork failed!\n");
         perror("fork");
         abort();
     }
@@ -88,8 +84,7 @@ TestResult run_test(int test_num)
         if (WIFEXITED(child_return)) {
             int nbytes = read(fd[0], &test_result, sizeof(TestResult));
             if (nbytes != sizeof(TestResult)) {
-                RED_MSG(_seer_error,
-                        "FATAL: read() TestResult mismatch. "
+                RED_MSG("FATAL: read() TestResult mismatch. "
                         "Do not trust tests after this line.\n");
                 test_result.result = FAIL;
                 strcpy(test_result.comment, "Internal system error.");

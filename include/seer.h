@@ -11,7 +11,7 @@
 
 #define MAX_STR 128
 
-#define TEST_RESULT_INIT {INIT, "BLANK_DESCRIPTION", "BLANK_FEEDBACK"}
+#define TEST_RESULT_INIT {INIT, "No description", "No comment"}
 
 FILE *_seer_output;
 FILE *_seer_error;

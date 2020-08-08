@@ -1,3 +1,14 @@
 #include <stdlib.h>
 
-int add_two_numbers(int x, int y);
+typedef struct node_struct {
+    int data;
+    struct node_struct *next;
+} Node;
+
+Node *create_node(int data);
+
+Node *insert_node(Node *list, int data);
+
+int search(Node *list, int data);
+
+void destroy_list(Node *list);
