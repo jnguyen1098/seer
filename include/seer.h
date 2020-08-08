@@ -11,15 +11,26 @@
 
 #define MAX_STR 128
 
-#define TEST_RESULT_INIT {-1, "Uninitialized"}
+#define TEST_RESULT_INIT {INIT, "Uninitialized"}
+
+FILE *_seer_output;
+FILE *_seer_error;
+
+enum _seer_result_code {
+    INIT,   // Uninitialized
+    PASS,   // Test passed
+    FAIL,   // Test failed
+    CRASH,  // Test crashed
+    FINISH, // Finished tests
+};
 
 typedef struct _seer_test_case {
     char description[MAX_STR];
 } TestCase;
 
 typedef struct _seer_test_result {
-    int passed;
-    char feedback[MAX_STR];
+    int result;
+    char comment[MAX_STR];
 } TestResult;
 
 /* External test runner */

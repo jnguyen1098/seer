@@ -7,9 +7,9 @@
 void _seer_test_ansi(void);
 
 /* Coloured printf */
-#define GREEN_MSG(x)    (printf("%s%s%s", ANSI_GREEN, x, ANSI_RESET))
-#define RED_MSG(x)      (printf("%s%s%s", ANSI_RED, x, ANSI_RESET))
-#define YELLOW_MSG(x)   (printf("%s%s%s", ANSI_YELLOW, x, ANSI_RESET))
+#define GREEN_MSG(x, y) (fprintf(x, "%s%s%s", ANSI_GREEN, y, ANSI_RESET))
+#define RED_MSG(x, y)   (fprintf(x, "%s%s%s", ANSI_RED, y, ANSI_RESET))
+#define YELLOW_MSG(x, y)(fprintf(x, "%s%s%s", ANSI_YELLOW, y, ANSI_RESET))
 
 /* Reset */
 #define ANSI_RESET      "\x1B[0m"
