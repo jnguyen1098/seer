@@ -1,11 +1,9 @@
 #include "seer.h"
 #include "text.h"
-#include <assert.h>
-
-// TODO: this is where you include the student's headers
-#include "student.h"
-
 #define MAX_TESTS 10000
+
+/* TODO: edit config.h to include student .h files */
+#include "config.h"
 
 int main(void)
 {
@@ -25,7 +23,8 @@ int main(void)
     int num_fail = 0;
     int num_crash = 0;
 
-    /* Run tests and record results */
+    /* Run tests and record results. Shouldn't change
+     * unless absolutely necessary. */
     for (;;) {
         TestResult tmp_result = run_test(num_test);
         if (tmp_result.result == FINISH) {
@@ -34,28 +33,44 @@ int main(void)
         test_results[num_test++] = tmp_result;
     }
 
+    /* TODO: Print test results. Change as you please. */
     for (int i = 0; i < num_test; i++) {
-        printf("Test %04d - %s - ", i, test_results[i].comment);
+
+        /* Print test and description */
+        printf("Test %04d - %s - ", i, test_results[i].description);
+
+        /* Print result and instructor comment */
         switch (test_results[i].result) {
             case PASS:
                 num_pass++;
-                GREEN_MSG(_seer_output, "Passed!\n");
+                GREEN_MSG(_seer_output, "Passed! (");
+                GREEN_MSG(_seer_output, test_results[i].comment);
+                GREEN_MSG(_seer_output, ")\n");
                 break;
 
             case FAIL:
                 num_fail++;
-                RED_MSG(_seer_output, "Failed!\n");
+                RED_MSG(_seer_output, "Failed! (");
+                RED_MSG(_seer_output, test_results[i].comment);
+                RED_MSG(_seer_output, ")\n");
                 break;
 
             case CRASH:
                 num_crash++;
-                YELLOW_MSG(_seer_output, "Crashed!\n");
+                YELLOW_MSG(_seer_output, "Crashed! (");
+                YELLOW_MSG(_seer_output, test_results[i].comment);
+                YELLOW_MSG(_seer_output, ")\n");
                 break;
+
+            case INIT:
+                YELLOW_MSG(_seer_output, "Uninitialized test. Please fix.\n");
         }
     }
 
+    /* \n */
     puts("");
 
+    /* Final report */
     GREEN_MSG(_seer_output, "Tests passed: ");
     printf("%d/%d\n", num_pass, num_test);
 
