@@ -89,6 +89,7 @@ valgrade: $(BUILD_DIR)/$(TARGET_EXEC)
 # run internal tests
 test:
 	@echo "Not implemented yet."
+	@echo "TODO: add ANSI colour test to test."
 
 # check for coding booboos
 lint:
