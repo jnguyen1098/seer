@@ -80,5 +80,9 @@ int main(void)
     YELLOW_MSG(_seer_output, "Crashes: ");
     printf("%d/%d\n", num_crash, num_test);
 
+    /* Final score */
+    printf("\nFinal score: %.2f%%\n", 100.00 * ((float)num_pass/(float)num_test));
+
+
     return 0;
 }

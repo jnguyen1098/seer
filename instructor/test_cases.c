@@ -4,8 +4,10 @@
 
 TestResult _run_test(int test_num)
 {
+    /* Initialize result struct */
     TestResult test_result = TEST_RESULT_INIT;
 
+    /* Choose test */
     switch (test_num) {
         case 0: {
             /* Initialize results */
@@ -43,5 +45,6 @@ TestResult _run_test(int test_num)
         }
     }
 
+    /* Return */
     return test_result;
 }
