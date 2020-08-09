@@ -44,17 +44,17 @@ const char _signalstr[32][16] = {
     "SIGSYS",   // Bad system call
 };
 
-void description(char message[MAX_STR])
+void description(char message[SEER_MAX_STR])
 {
-    if (strlen(message) >= MAX_STR) {
-        char overflow_message[MAX_STR] = {0};
-        strncpy(overflow_message, "Description too long. Fix.", MAX_STR);
-        write(fd[1], overflow_message, MAX_STR);
+    if (strlen(message) >= SEER_MAX_STR) {
+        char overflow_message[SEER_MAX_STR] = {0};
+        strncpy(overflow_message, "Description too long. Fix.", SEER_MAX_STR);
+        write(fd[1], overflow_message, SEER_MAX_STR);
     }
 
-    char to_send[MAX_STR] = "";
-    strncpy(to_send, message, MAX_STR);
-    write(fd[1], message, MAX_STR);
+    char to_send[SEER_MAX_STR] = "";
+    strncpy(to_send, message, SEER_MAX_STR);
+    write(fd[1], message, SEER_MAX_STR);
 }
 
 TestResult run_test(int test_num)
@@ -103,11 +103,11 @@ TestResult run_test(int test_num)
 
         if (WIFEXITED(child_return)) {
             /* Prepare description */
-            char description[MAX_STR] = {0};
+            char description[SEER_MAX_STR] = {0};
 
             /* Read description */
-            int desc_bytes = read(fd[0], description, MAX_STR);
-            if (desc_bytes != MAX_STR) {
+            int desc_bytes = read(fd[0], description, SEER_MAX_STR);
+            if (desc_bytes != SEER_MAX_STR) {
                 RED_MSG("FATAL: Could not read description from pipe. "
                         "TestResult wasn't written. Aborting Seer...\n");
                 abort();
@@ -121,14 +121,11 @@ TestResult run_test(int test_num)
                 test_result.result = FAIL;
                 strcpy(test_result.comment, "Internal pipe read error.");
                 strcpy(test_result.description, "(unknown test)");
-            }
-            else {
+            } else {
                 /* Write description to intermediate TestResult if no error */
                 strcpy(test_result.description, description);
             }
-        }
-
-        else {
+        } else {
             /* Derive crash reason */
             int signal_code = 
                 WIFSTOPPED(child_return) ?
@@ -136,13 +133,13 @@ TestResult run_test(int test_num)
                 WTERMSIG(child_return);
 
             /* Prepare to salvage description */
-            char description[MAX_STR] = "(description lost due to crash)";
+            char description[SEER_MAX_STR] = "(description lost due to crash)";
 
             /* Read description from pipe */
-            int nbytes = read(fd[0], description, MAX_STR);
+            int nbytes = read(fd[0], description, SEER_MAX_STR);
 
             /* Verify pipe read */
-            if (nbytes != MAX_STR) {
+            if (nbytes != SEER_MAX_STR) {
                 RED_MSG("FATAL: read() description salvage mismatch. "
                         "Do not trust tests after this line.\n");
             }

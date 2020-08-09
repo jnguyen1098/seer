@@ -22,7 +22,7 @@ int main(int argc, char *argv[])
     }
 
     /* Initialize test results */
-    TestResult test_results[MAX_TESTS] = {0};
+    TestResult test_results[SEER_MAX_TESTS] = {0};
 
     int num_test = 0;
     int num_pass = 0;

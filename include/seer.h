@@ -18,13 +18,13 @@
  * Maximum amount of tests
  * @internal
  **/
-#define MAX_TESTS 1000
+#define SEER_MAX_TESTS 1000
 
 /**
  * Maximum length of string
  * @internal
  **/
-#define MAX_STR 128
+#define SEER_MAX_STR 128
 
 /**
  * Default initializer for a test result
@@ -59,8 +59,8 @@ typedef enum _seer_result_code {
  **/
 typedef struct _seer_test_result {
     int result;
-    char description[MAX_STR];
-    char comment[MAX_STR];
+    char description[SEER_MAX_STR];
+    char comment[SEER_MAX_STR];
 } TestResult;
 
 /**
@@ -68,7 +68,7 @@ typedef struct _seer_test_result {
  * 
  * @param message message to send
  **/
-void description(char message[MAX_STR]);
+void description(char message[SEER_MAX_STR]);
 
 /**
  * External test runner, called in `run_main.c`.

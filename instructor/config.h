@@ -1,6 +1,6 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
-#include "example.h"
+#include "gryphflix.h"
 
 #endif

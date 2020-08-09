@@ -23,46 +23,10 @@ TestResult _run_test(int test_num)
          **/
 
         case 0: {
-            description("Test string_to_upper() on 'hello'");
-            char test_string[] = "hello";
-            char target_string[] = "HELLO";
-            if (strcmp(string_to_upper(test_string), target_string)) {
+            description("Assert openFileForReading(NULL) == NULL");
+            if (openFileForReading("invalidfile")) {
                 test_result.result = FAIL;
-                strcpy(test_result.comment, "Strings unequal");
-            } else {
-                test_result.result = PASS;
-            }
-            break;
-        }
-
-        case 1: {
-            description("Test string_to_upper() on long string");
-            char test_string[] = "a sfg asfgFg ASfg fds gaFg AFSgfa sFga fs";
-            char target_string[] = "A SFG ASFGFG ASFG FDS GAFG AFSGFA SFGA FS";
-            if (strcmp(string_to_upper(test_string), target_string)) {
-                test_result.result = FAIL;
-                strcpy(test_result.comment, "Strings unequal");
-            } else {
-                test_result.result = PASS;
-            }
-            break;
-        }
-
-        case 2: {
-            /* Intentionally forcing a crash */
-            description("Force segmentation fault");
-            raise(SIGSEGV);
-            break;
-        }
-
-        case 3: {
-            /* string_to_lower() was intentionally made to fail */
-            description("Test string_to_lower on 'hElLo'");
-            char test_string[] = "hElLo";
-            char target_string[] = "hello";
-            if (strcmp(string_to_lower(test_string), target_string)) {
-                test_result.result = FAIL;
-                strcpy(test_result.comment, "Strings unequal");
+                strcpy(test_result.comment, "Should have returned NULL");
             } else {
                 test_result.result = PASS;
             }
