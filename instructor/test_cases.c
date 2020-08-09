@@ -48,6 +48,41 @@ TestResult _run_test(int test_num)
             break;
         }
 
+        case 1: {
+            strcpy(test_result.description, "Test string_to_upper() on long string");
+            char test_string[] = "a sfg asfgFg ASfg fds gaFg AFSgfa sFga fs";
+            char target_string[] = "A SFG ASFGFG ASFG FDS GAFG AFSGFA SFGA FS";
+            if (strcmp(string_to_upper(test_string), target_string)) {
+                test_result.result = FAIL;
+                strcpy(test_result.comment, "Strings unequal");
+            } else {
+                test_result.result = PASS;
+            }
+            break;
+        }
+
+        case 2: {
+            /* Forcing a crash */
+            strcpy(test_result.description, "Force segmentation fault");
+            char *bad_ptr = NULL;
+            strcpy(bad_ptr, "safdgjjsalkdfajlksdfg");
+            break;
+        }
+
+        case 3: {
+            /* string_to_lower() was intentionally made to fail */
+            strcpy(test_result.description, "Test string_to_lower() on 'hElLo'");
+            char test_string[] = "hElLo";
+            char target_string[] = "hello";
+            if (strcmp(string_to_lower(test_string), target_string)) {
+                test_result.result = FAIL;
+                strcpy(test_result.comment, "Strings unequal");
+            } else {
+                test_result.result = PASS;
+            }
+            break;
+        }
+
         /* This is used to signal that the 
          * testing is finished. Do not change.*/
         default: {

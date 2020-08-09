@@ -103,12 +103,10 @@ TestResult run_test(int test_num)
                 WSTOPSIG(child_return) :
                 WTERMSIG(child_return);
 
+            strcpy(test_result.description, "(description lost due to crash)");
             test_result.result = CRASH;
-            sprintf(
-                    test_result.comment,
-                    "Killed by %s signal",
-                    _signalstr[signal_code]
-                   );
+            sprintf(test_result.comment, "Killed by %s signal",
+                _signalstr[signal_code]);
         }
 
     }

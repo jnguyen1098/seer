@@ -15,6 +15,12 @@
 #include <unistd.h>
 
 /**
+ * Maximum amount of tests
+ * @internal
+ **/
+#define MAX_TESTS 1000
+
+/**
  * Maximum length of string
  * @internal
  **/

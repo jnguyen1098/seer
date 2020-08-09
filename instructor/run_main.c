@@ -7,7 +7,6 @@
  */
 #include "seer.h"
 #include "text.h"
-#define MAX_TESTS 1000
 
 /* Make sure to edit config.h to include student files */
 #include "config.h"

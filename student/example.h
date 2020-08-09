@@ -7,4 +7,6 @@
 
 char *string_to_upper(char *string);
 
+char *string_to_lower(char *string);
+
 #endif
