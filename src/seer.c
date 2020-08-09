@@ -7,6 +7,8 @@
 #include "seer.h"
 #include "text.h"
 
+int fd[2];
+
 const char _signalstr[32][16] = {
     "(none)",   // No signal
     "SIGHUP",   // Terminal hangup
@@ -42,13 +44,25 @@ const char _signalstr[32][16] = {
     "SIGSYS",   // Bad system call
 };
 
+void description(char message[MAX_STR])
+{
+    if (strlen(message) >= MAX_STR) {
+        char overflow_message[MAX_STR] = {0};
+        strncpy(overflow_message, "Description too long. Fix.", MAX_STR);
+        write(fd[1], overflow_message, MAX_STR);
+    }
+
+    char to_send[MAX_STR] = "";
+    strncpy(to_send, message, MAX_STR);
+    write(fd[1], message, MAX_STR);
+}
+
 TestResult run_test(int test_num)
 {
     /* Create test result struct */
     TestResult test_result = TEST_RESULT_INIT;
 
     /* Create IPC */
-    int fd[2];
     pid_t child_pid;
 
     /* Check pipe */
@@ -88,25 +102,56 @@ TestResult run_test(int test_num)
         waitpid(child_pid, &child_return, WUNTRACED);
 
         if (WIFEXITED(child_return)) {
-            int nbytes = read(fd[0], &test_result, sizeof(TestResult));
-            if (nbytes != sizeof(TestResult)) {
-                RED_MSG("FATAL: read() TestResult mismatch. "
-                        "Do not trust tests after this line.\n");
+            /* Prepare description */
+            char description[MAX_STR] = {0};
+
+            /* Read description */
+            int desc_bytes = read(fd[0], description, MAX_STR);
+            if (desc_bytes != MAX_STR) {
+                RED_MSG("FATAL: Could not read description from pipe. "
+                        "TestResult wasn't written. Aborting Seer...\n");
+                abort();
+            }
+
+            /* Read in intermediate TestResult */
+            int test_bytes = read(fd[0], &test_result, sizeof(TestResult));
+            if (test_bytes != sizeof(TestResult)) {
+                RED_MSG("ERROR: read() TestResult mismatch. "
+                        "Did you forget a description()? Please fix.\n");
                 test_result.result = FAIL;
-                strcpy(test_result.comment, "Internal system error.");
+                strcpy(test_result.comment, "Internal pipe read error.");
+                strcpy(test_result.description, "(unknown test)");
+            }
+            else {
+                /* Write description to intermediate TestResult if no error */
+                strcpy(test_result.description, description);
             }
         }
 
         else {
+            /* Derive crash reason */
             int signal_code = 
                 WIFSTOPPED(child_return) ?
                 WSTOPSIG(child_return) :
                 WTERMSIG(child_return);
 
-            strcpy(test_result.description, "(description lost due to crash)");
+            /* Prepare to salvage description */
+            char description[MAX_STR] = "(description lost due to crash)";
+
+            /* Read description from pipe */
+            int nbytes = read(fd[0], description, MAX_STR);
+
+            /* Verify pipe read */
+            if (nbytes != MAX_STR) {
+                RED_MSG("FATAL: read() description salvage mismatch. "
+                        "Do not trust tests after this line.\n");
+            }
+
+            /* Create diagnostic TestResult */
+            strcpy(test_result.description, description);
             test_result.result = CRASH;
             sprintf(test_result.comment, "Killed by %s signal",
-                _signalstr[signal_code]);
+                    _signalstr[signal_code]);
         }
 
     }

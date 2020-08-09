@@ -33,6 +33,11 @@
 #define TEST_RESULT_INIT {INIT, "No description", "No comment"}
 
 /**
+ * File descriptors for IPC
+ **/
+extern int fd[2];
+
+/**
  * Enum used to portably keep track of test results.
  * I will likely expand upon this in the future, so do not
  * use straight integers as this will ruin results.
@@ -57,6 +62,13 @@ typedef struct _seer_test_result {
     char description[MAX_STR];
     char comment[MAX_STR];
 } TestResult;
+
+/**
+ * Function to pipe description to parent process via pipe
+ * 
+ * @param message message to send
+ **/
+void description(char message[MAX_STR]);
 
 /**
  * External test runner, called in `run_main.c`.

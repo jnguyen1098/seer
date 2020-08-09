@@ -11,32 +11,19 @@ TestResult _run_test(int test_num)
     switch (test_num) {
 
         /**
-         * TODO: make test cases here.
+         * TODO: make test cases here
          *
-         * A test case is defined by its case number (switch case).
-         * In creating a test case, you must use the proper ordering.
-         * This means you can't make test 0, then skip to test 2. You
-         * must make test 1, and THEN test 2.
+         * Create each new test case as a "case" in the switch statement.
+         * You must use the proper ordering or the testing will suddenly end.
          * 
-         * Every time a test runs, a new test result object is created.
-         * This object has three members that you fill out:
-         *
-         *    description - a descriptive summary of the test being done
-         *
-         *    result - either PASS or FAIL. Assign when a test finishes.
-         *
-         *    comment - descriptive summary of the test result (should
-         *              be specific to the test result!)
-         *
-         * description and comment are optional, but result is not. If
-         * you do not fill out the result, the harness will report the
-         * test as uninitialized and advise you to fix it.
-         *
-         * There is a linked list example in a separate repo branch.
+         * You will be responsible for filling out the description() and
+         * result. These two fields are not optional.
+         * 
+         * What is optional, though, is the 'comment' member.
          **/
 
         case 0: {
-            strcpy(test_result.description, "Test string_to_upper() on 'hello'");
+            description("Test string_to_upper() on 'hello'");
             char test_string[] = "hello";
             char target_string[] = "HELLO";
             if (strcmp(string_to_upper(test_string), target_string)) {
@@ -49,7 +36,7 @@ TestResult _run_test(int test_num)
         }
 
         case 1: {
-            strcpy(test_result.description, "Test string_to_upper() on long string");
+            description("Test string_to_upper() on long string");
             char test_string[] = "a sfg asfgFg ASfg fds gaFg AFSgfa sFga fs";
             char target_string[] = "A SFG ASFGFG ASFG FDS GAFG AFSGFA SFGA FS";
             if (strcmp(string_to_upper(test_string), target_string)) {
@@ -62,8 +49,8 @@ TestResult _run_test(int test_num)
         }
 
         case 2: {
-            /* Forcing a crash */
-            strcpy(test_result.description, "Force segmentation fault");
+            /* Intentionally forcing a crash */
+            description("Force segmentation fault");
             char *bad_ptr = NULL;
             strcpy(bad_ptr, "safdgjjsalkdfajlksdfg");
             break;
@@ -71,7 +58,7 @@ TestResult _run_test(int test_num)
 
         case 3: {
             /* string_to_lower() was intentionally made to fail */
-            strcpy(test_result.description, "Test string_to_lower() on 'hElLo'");
+            description("Test string_to_lower on 'hElLo'");
             char test_string[] = "hElLo";
             char target_string[] = "hello";
             if (strcmp(string_to_lower(test_string), target_string)) {
@@ -86,6 +73,7 @@ TestResult _run_test(int test_num)
         /* This is used to signal that the 
          * testing is finished. Do not change.*/
         default: {
+            description("Testing finished");
             TestResult result = {
                 .result = FINISH,
                 .description = "Testing finished",
