@@ -4,6 +4,8 @@ Generalized test harness for small-to-medium-sized C projects.
 
 The frontend of Seer is a simple `makefile` interface that can be brought up using the command `make` or `make help`.
 
+In order to make the `valgrind` report more accurate and reduce the potential margin of error, nothing in this test harness is heap/dynamically-allocated. `TestResults` contain no pointers and are passed by value. Delegating memory management (outside of calling `close()`) makes Seer considerably more reliable. Surprisingly, no pointers were used.
+
 ## Features
 
 - Seamless test case creation -- all cases are routed through a single function with a switch statement that takes in a test number.

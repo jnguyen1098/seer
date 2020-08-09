@@ -51,8 +51,7 @@ TestResult _run_test(int test_num)
         case 2: {
             /* Intentionally forcing a crash */
             description("Force segmentation fault");
-            char *bad_ptr = NULL;
-            strcpy(bad_ptr, "safdgjjsalkdfajlksdfg");
+            raise(SIGSEGV);
             break;
         }
 
