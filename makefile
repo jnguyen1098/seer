@@ -36,7 +36,7 @@ CC = gcc
 # editor
 EDITOR = vim
 # c compiler flags
-CFLAGS = -std=c99 -Wall -Wextra -Wpedantic -ggdb3
+CFLAGS = -std=c99 -Wall -ggdb3
 # valgrind flags
 VFLAGS = --show-leak-kinds=all --track-origins=yes --leak-check=full
 
