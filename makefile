@@ -36,7 +36,7 @@ CC = gcc
 # editor
 EDITOR = vim
 # c compiler flags
-CFLAGS = -std=c99 -Wall -ggdb3
+CFLAGS = -std=c99 -Wall -Wextra -Wpedantic -ggdb3 -D"main(...)"="old_basic_main(__VA_ARGS__)"
 # valgrind flags
 VFLAGS = --show-leak-kinds=all --track-origins=yes --leak-check=full
 
@@ -60,18 +60,20 @@ INC_FLAGS := $(addprefix -I,$(INC_DIRS))
 .PHONY: grade valgrade config edit plan scan debug clean
 
 # build executable
-$(BUILD_DIR)/$(TARGET_EXEC): $(OBJS)
+$(BUILD_DIR)/$(TARGET_EXEC): $(OBJS) FORCE_CLEAN
 	$(CC) $(OBJS) -o $@
 
 # build c objs
-$(BUILD_DIR)/%.c.o: %.c
+$(BUILD_DIR)/%.c.o: %.c FORCE_CLEAN
 	$(CC) $(CFLAGS) $(INC_FLAGS) -c $< -o $@
 
 # grade student submission
+# TODO: if needed, you may need to redirect user input in using < ./path/to/input.txt
 grade: $(BUILD_DIR)/$(TARGET_EXEC)
 	./$(BUILD_DIR)/$(TARGET_EXEC)
 
 # grade student submission with valgrind
+# TODO: if needed, you may need to redirect user input in using < ./path/to/input.txt
 valgrade: $(BUILD_DIR)/$(TARGET_EXEC)
 	valgrind $(VFLAGS) ./$(BUILD_DIR)/$(TARGET_EXEC) --valgrind
 
@@ -111,3 +113,6 @@ clean:
 	rm -rf $(BUILD_DIR)/student/*
 	rm -rf $(BUILD_DIR)/instructor/*
 	rm -rf $(BUILD_DIR)/$(TARGET_EXEC)
+
+# workaround to force rebuild
+FORCE_CLEAN:

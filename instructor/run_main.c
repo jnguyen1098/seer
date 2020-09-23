@@ -11,6 +11,11 @@
 /* Make sure to edit config.h to include student files */
 #include "config.h"
 
+/* Re-define main */
+#ifdef main
+#undef main
+#endif
+
 int main(int argc, char *argv[])
 {
     /* Change output if valgrind */

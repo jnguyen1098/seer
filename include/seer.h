@@ -18,13 +18,13 @@
  * Maximum amount of tests
  * @internal
  **/
-#define SEER_MAX_TESTS 1000
+#define SEER_MAX_TESTS 512
 
 /**
  * Maximum length of string
  * @internal
  **/
-#define SEER_MAX_STR 128
+#define SEER_MAX_STR 256
 
 /**
  * Default initializer for a test result
