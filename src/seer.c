@@ -14,7 +14,7 @@ const char _signalstr[32][16] = {
     "SIGHUP",   // Terminal hangup
     "SIGINT",   // Interrupt
     "SIGQUIT",  // Quit + core dump
-    "SIGILL",   // Illegal instruction
+    "SIGILL",   // "The notorious" Illegal instruction
     "SIGTRAP",  // Trace trap
     "SIGABRT",  // Aborted
     "SIGBUS",   // Bus error
